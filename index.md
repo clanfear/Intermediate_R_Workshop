@@ -2,16 +2,16 @@
 layout: default
 ---
 
-# Introduction to R
-## Autumn 2018
+# Intermediate R
+## Winter 2019
 ### University of Washington Tacoma
 
 ## Important links
 
-* [Presentation Slides](https://clanfear.github.io/Intro_R_Workshop/intro_r_slides.html)
-* [.R Script to follow along](https://raw.githubusercontent.com/clanfear/Intro_R_Workshop/master/intro_r_script.R) (Save as to download)
+* [Presentation Slides](https://clanfear.github.io/Intermediate_R_Workshop/intermediate_r_slides.html)
+* [.R Script to follow along](https://raw.githubusercontent.com/clanfear/Intermediate_R_Workshop/master/intermediate_r_script.R) (Save as to download)
 * [R and RStudio Installation Instructions](https://clanfear.github.io/CSSS508/docs/installation.html)
-* [Panopto Recording of Workshop](https://uw.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=3a74dbec-2b0a-46c0-807e-a97601418534), recorded Oct. 11, 2018 (Requires UW NetID)
+* Panopto Recording of Workshop (Not Up Yet), recorded Jan 31, 2018 (Requires UW NetID)
 
 ## General R Resources:
 
