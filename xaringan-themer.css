@@ -34,7 +34,7 @@ h1, h2, h3 {
 .remark-slide-content {
   background-color: #FFFFFF;
   font-size: 20px;
-  background-image: url(https://clanfear.github.io/Intro_R_Workshop/img/UWTacomaBG1.svg);
+  background-image: url(https://clanfear.github.io/Intermediate_R_Workshop/img/UWTacomaBG1.svg);
   background-size: cover;
   
   padding: 1em 4em 1em 4em;
@@ -93,7 +93,7 @@ a, a > code {
 }
 .title-slide {
   background-color: #342c5c;
-  background-image: url(https://raw.githubusercontent.com/clanfear/CSSS508/master/Lectures/Week1/img/title_slide_img.png);
+  
   background-size: contain;
   background-position: bottom;
 }
@@ -192,6 +192,9 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   border-radius: 3px;
   padding: 2px;
 }
+.smallish {
+  font-size: 85%;
+}
 .small {
   font-size: 75%;
 }
@@ -231,4 +234,9 @@ body {
 }
 .inverse {
   background-image: url(https://clanfear.github.io/Intro_R_Workshop/img/UWTacomaBG1_white.svg);
+}
+.title-slide {
+  background-image: url(https://clanfear.github.io/Intermediate_R_Workshop/img/UWTacomaBG1_white.svg), url(https://clanfear.github.io/Intermediate_R_Workshop/img/title_slide_img.png);
+  background-position: center center, center bottom;
+  background-size: contain, contain;
 }

@@ -1,76 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Intermediate R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Charles Lanfear" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, top, title-slide
+
+# Intermediate R
+## UW Tacoma
+### Charles Lanfear
+### Jan 31, 2019<br>Updated: Jan 29, 2019
+
 ---
-title: "Intermediate R"
-subtitle: "UW Tacoma"  
-author: "Charles Lanfear"
-date: "Jan 31, 2019<br>Updated: `r gsub(' 0', ' ', format(Sys.Date(), format='%b %d, %Y'))`"
-output:
-  xaringan::moon_reader:
-    lib_dir: libs
-    css: xaringan-themer.css
-    nature:
-      highlightStyle: tomorrow-night-bright
-      highlightLines: true
-      countIncrementalSlides: false
-      titleSlideClass: ["center","top"]
----
 
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-```
 
-```{r xaringan-themer, include=FALSE}
-library(xaringanthemer)
 
-csss508css <- list(
-     ".hljs-tomorrow-night-bright .hljs" = list(
-        "background" = "#10102c",
-        "border-radius"="5px"),
-     ".remark-inline-code" = list(
-        "background" = "#E0E0E0",
-        "color" = "#10102c",
-        "border-radius" = "3px",
-        "padding" = "2px"),
-     ".inverse .remark-inline-code" = list(
-        "background" = "#10102c",
-        "color" = "#ececf8",
-        "border-radius" = "3px",
-        "padding" = "2px"),
-     ".smallish" = list("font-size" = "85%"),
-     ".small" = list("font-size" = "75%"),
-     ".smaller" = list("font-size" = "60%"),
-     ".remark-code-line-highlighted" = list(
-        "background-color" = "rgba(255,0,255,0.2)"),
-     "sup" = list("font-size" = "14px"),
-     "h1, h2, h3" = list(
-        "margin-top"=".25em", 
-        "margin-bottom"=".25em"),
-     ".pull-left60" = list(
-        "float" = "left",
-        "width" = "58%" ),
-     ".pull-right40" = list(
-        "float" = "right",
-        "width" = "38%" ),
-     ".pull-right30" = list(
-        "float" = "right",
-        "width" = "30%" ),
-     "a" = list("text-decoration" = "underline"),
-     ".inverse a" = list("color" = "#cbd3a3"),
-     "body" = list("line-height" = "1.4"),
-     ".inverse" = list("background-image" = "url(https://clanfear.github.io/Intro_R_Workshop/img/UWTacomaBG1_white.svg)"),
-     ".title-slide" = list("background-image" = "url(https://clanfear.github.io/Intermediate_R_Workshop/img/UWTacomaBG1_white.svg), url(https://clanfear.github.io/Intermediate_R_Workshop/img/title_slide_img.png)",
-                           "background-position" = "center center, center bottom",
-                           "background-size" = "contain, contain")
-    )
 
-mono_accent(base_color = "#342c5c",
-            code_font_google = google_font("Fira Mono"),
-            header_font_google = google_font("Quattrocento"),
-            extra_css = csss508css,
-            title_slide_background_position = "bottom",
-            title_slide_background_size = "contain",
-            background_image = "https://clanfear.github.io/Intermediate_R_Workshop/img/UWTacomaBG1.svg"
-)
-```
+
 
 
 # Overview
@@ -109,7 +59,8 @@ The `tidyverse` includes the most used packages in the R world: [`dplyr`](https:
 
 You can install the *entire* `tidyverse` with the following:
 
-```{r, eval=FALSE}
+
+```r
 install.packages("tidyverse")
 ```
 
@@ -117,7 +68,8 @@ install.packages("tidyverse")
 
 We will also use the `gapminder` and `nycflights13` datasets:
 
-```{r, eval=FALSE}
+
+```r
 install.packages("gapminder")
 install.packages("nycflights13")
 ```
@@ -129,20 +81,29 @@ class: inverse
 
 
 ---
-# But First, Pipes: `%>%`
+# But First, Pipes: `%&gt;%`
 
-`dplyr` uses the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) forward pipe operator, usually called simply a **pipe**. We write pipes like `%>%` (`Ctrl+Shift+M` or `⌘ +Shift+M`).
-
---
-
-Pipes take the object on the *left* and apply the function on the *right*: `x %>% f(y) = f(x, y)`. Read out loud: "and then..."
+`dplyr` uses the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) forward pipe operator, usually called simply a **pipe**. We write pipes like `%&gt;%` (`Ctrl+Shift+M` or `⌘ +Shift+M`).
 
 --
 
-```{r, message=FALSE, warning=FALSE}
+Pipes take the object on the *left* and apply the function on the *right*: `x %&gt;% f(y) = f(x, y)`. Read out loud: "and then..."
+
+--
+
+
+```r
 library(dplyr)
 library(gapminder)
-gapminder %>% filter(country == "Canada") %>% head(2)
+gapminder %&gt;% filter(country == "Canada") %&gt;% head(2)
+```
+
+```
+## # A tibble: 2 x 6
+##   country continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Canada  Americas   1952    68.8 14785584    11367.
+## 2 Canada  Americas   1957    70.0 17010154    12490.
 ```
 
 --
@@ -158,10 +119,11 @@ Pipes are clearest to read when you have each function on a separate line.
 
 --
 
-```{r, eval=FALSE}
-take_this_data %>%
-    do_first_thing(with = this_value) %>%
-    do_next_thing(using = that_value) %>% ...
+
+```r
+take_this_data %&gt;%
+    do_first_thing(with = this_value) %&gt;%
+    do_next_thing(using = that_value) %&gt;% ...
 ```
 
 --
@@ -171,8 +133,9 @@ Stuff to the left of the pipe is passed to the *first argument* of the function 
 --
 
 If you ever find yourself piping a function where data are not the first argument, use `.` in the data argument instead.
-```{r, eval=FALSE}
-gapminder %>% lm(pop ~ year, data = .)
+
+```r
+gapminder %&gt;% lm(pop ~ year, data = .)
 ```
 
 ---
@@ -181,8 +144,9 @@ gapminder %>% lm(pop ~ year, data = .)
 
 When creating a new object from the output of piped functions, you place the assignment operator *at the beginning*.
 
-```{r, eval=FALSE}
-lm_pop_year <- gapminder %>% 
+
+```r
+lm_pop_year &lt;- gapminder %&gt;% 
   lm(pop ~ year, data = .)
 ```
 
@@ -194,8 +158,23 @@ No matter how long the chain of functions is, assignment is always done *at the 
 
 I used `filter()` earlier. We subset *rows* of data using logical conditions with `filter()`!
 
-```{r}
-gapminder %>% filter(country == "Oman") %>% head(8)
+
+```r
+gapminder %&gt;% filter(country == "Oman") %&gt;% head(8)
+```
+
+```
+## # A tibble: 8 x 6
+##   country continent  year lifeExp     pop gdpPercap
+##   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
+## 1 Oman    Asia       1952    37.6  507833     1828.
+## 2 Oman    Asia       1957    40.1  561977     2243.
+## 3 Oman    Asia       1962    43.2  628164     2925.
+## 4 Oman    Asia       1967    47.0  714775     4721.
+## 5 Oman    Asia       1972    52.1  829050    10618.
+## 6 Oman    Asia       1977    57.4 1004533    11848.
+## 7 Oman    Asia       1982    62.7 1301048    12955.
+## 8 Oman    Asia       1987    67.7 1593882    18115.
 ```
 
 What is this doing?
@@ -221,7 +200,7 @@ There are many other [logical operators](http://www.statmethods.net/management/o
 * `!=`: not equal to
 --
 
-* `>`, `>=`, `<`, `<=`: less than, less than or equal to, etc.
+* `&gt;`, `&gt;=`, `&lt;`, `&lt;=`: less than, less than or equal to, etc.
 --
 
 * `%in%`: used with checking equal to one of several values
@@ -230,7 +209,7 @@ There are many other [logical operators](http://www.statmethods.net/management/o
 
 Or we can combine multiple logical conditions:
 
-* `&`: both conditions need to hold (AND)
+* `&amp;`: both conditions need to hold (AND)
 --
 
 * `|`: at least one condition needs to hold (OR)
@@ -246,11 +225,22 @@ Let's say we want observations from Oman after 1980 and through 2000.
 
 --
 
-```{r}
-gapminder %>%
-    filter(country == "Oman" &
-           year > 1980 &
-           year <= 2000 )
+
+```r
+gapminder %&gt;%
+    filter(country == "Oman" &amp;
+           year &gt; 1980 &amp;
+           year &lt;= 2000 )
+```
+
+```
+## # A tibble: 4 x 6
+##   country continent  year lifeExp     pop gdpPercap
+##   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
+## 1 Oman    Asia       1982    62.7 1301048    12955.
+## 2 Oman    Asia       1987    67.7 1593882    18115.
+## 3 Oman    Asia       1992    71.2 1915208    18617.
+## 4 Oman    Asia       1997    72.5 2283635    19702.
 ```
 
 ---
@@ -258,13 +248,22 @@ gapminder %>%
 
 Common use case: Filter rows to things in some *set*.
 
-We can use `%in%` like `==` but for matching *any element* in the vector on its right<sup>1</sup>. 
+We can use `%in%` like `==` but for matching *any element* in the vector on its right&lt;sup&gt;1&lt;/sup&gt;. 
 
-```{r}
-former_yugoslavia <- c("Bosnia and Herzegovina", "Croatia", #<<
+
+```r
+*former_yugoslavia &lt;- c("Bosnia and Herzegovina", "Croatia",
               "Macedonia", "Montenegro", "Serbia", "Slovenia")
-yugoslavia <- gapminder %>% filter(country %in% former_yugoslavia)
+yugoslavia &lt;- gapminder %&gt;% filter(country %in% former_yugoslavia)
 tail(yugoslavia, 2)
+```
+
+```
+## # A tibble: 2 x 6
+##   country  continent  year lifeExp     pop gdpPercap
+##   &lt;fct&gt;    &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
+## 1 Slovenia Europe     2002    76.7 2011497    20660.
+## 2 Slovenia Europe     2007    77.9 2009245    25768.
 ```
 
 .footnote[[1] The `c()` function is how we make **vectors** in R, which are an important data type.]
@@ -274,8 +273,26 @@ tail(yugoslavia, 2)
 
 Along with filtering the data to see certain rows, we might want to sort it:
 
-```{r}
-yugoslavia %>% arrange(year, desc(pop))
+
+```r
+yugoslavia %&gt;% arrange(year, desc(pop))
+```
+
+```
+## # A tibble: 60 x 6
+##    country                continent  year lifeExp     pop gdpPercap
+##    &lt;fct&gt;                  &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
+##  1 Serbia                 Europe     1952    58.0 6860147     3581.
+##  2 Croatia                Europe     1952    61.2 3882229     3119.
+##  3 Bosnia and Herzegovina Europe     1952    53.8 2791000      974.
+##  4 Slovenia               Europe     1952    65.6 1489518     4215.
+##  5 Montenegro             Europe     1952    59.2  413834     2648.
+##  6 Serbia                 Europe     1957    61.7 7271135     4981.
+##  7 Croatia                Europe     1957    64.8 3991242     4338.
+##  8 Bosnia and Herzegovina Europe     1957    58.4 3076000     1354.
+##  9 Slovenia               Europe     1957    67.8 1533070     5862.
+## 10 Montenegro             Europe     1957    61.4  442829     3682.
+## # ... with 50 more rows
 ```
 
 The data are sorted by ascending `year` and descending `pop`.
@@ -285,8 +302,19 @@ The data are sorted by ascending `year` and descending `pop`.
 
 Not only can we subset rows, but we can include specific columns (and put them in the order listed) using `select()`. 
 
-```{r}
-yugoslavia %>% select(country, year, pop) %>% head(4)
+
+```r
+yugoslavia %&gt;% select(country, year, pop) %&gt;% head(4)
+```
+
+```
+## # A tibble: 4 x 3
+##   country                 year     pop
+##   &lt;fct&gt;                  &lt;int&gt;   &lt;int&gt;
+## 1 Bosnia and Herzegovina  1952 2791000
+## 2 Bosnia and Herzegovina  1957 3076000
+## 3 Bosnia and Herzegovina  1962 3349000
+## 4 Bosnia and Herzegovina  1967 3585000
 ```
 
 ---
@@ -295,8 +323,19 @@ yugoslavia %>% select(country, year, pop) %>% head(4)
 
 We can instead drop only specific columns with `select()` using `-` signs:
 
-```{r}
-yugoslavia %>% select(-continent, -pop, -lifeExp) %>% head(4)
+
+```r
+yugoslavia %&gt;% select(-continent, -pop, -lifeExp) %&gt;% head(4)
+```
+
+```
+## # A tibble: 4 x 3
+##   country                 year gdpPercap
+##   &lt;fct&gt;                  &lt;int&gt;     &lt;dbl&gt;
+## 1 Bosnia and Herzegovina  1952      974.
+## 2 Bosnia and Herzegovina  1957     1354.
+## 3 Bosnia and Herzegovina  1962     1710.
+## 4 Bosnia and Herzegovina  1967     2172.
 ```
 
 ---
@@ -309,9 +348,10 @@ These are very useful if you have a "wide" data frame with column names followin
 
 ![DYS Data Example](http://clanfear.github.io/CSSS508/Lectures/Week3/img/dys_vars.PNG)
 
-```{r, eval=FALSE}
-DYS %>% select(starts_with("married"))
-DYS %>% select(ends_with("18"))
+
+```r
+DYS %&gt;% select(starts_with("married"))
+DYS %&gt;% select(ends_with("18"))
 ```
 
 ---
@@ -320,10 +360,21 @@ DYS %>% select(ends_with("18"))
 
 We can rename columns using `select()`, but that drops everything that isn't mentioned:
 
-```{r}
-yugoslavia %>%
-    select(Life_Expectancy = lifeExp) %>%
+
+```r
+yugoslavia %&gt;%
+    select(Life_Expectancy = lifeExp) %&gt;%
     head(4)
+```
+
+```
+## # A tibble: 4 x 1
+##   Life_Expectancy
+##             &lt;dbl&gt;
+## 1            53.8
+## 2            58.4
+## 3            61.9
+## 4            64.8
 ```
 
 ---
@@ -332,11 +383,22 @@ yugoslavia %>%
 
 `rename()` renames variables using the same syntax as `select()` without dropping unmentioned variables.
 
-```{r}
-yugoslavia %>%
-    select(country, year, lifeExp) %>%
-    rename(Life_Expectancy = lifeExp) %>%
+
+```r
+yugoslavia %&gt;%
+    select(country, year, lifeExp) %&gt;%
+    rename(Life_Expectancy = lifeExp) %&gt;%
     head(4)
+```
+
+```
+## # A tibble: 4 x 3
+##   country                 year Life_Expectancy
+##   &lt;fct&gt;                  &lt;int&gt;           &lt;dbl&gt;
+## 1 Bosnia and Herzegovina  1952            53.8
+## 2 Bosnia and Herzegovina  1957            58.4
+## 3 Bosnia and Herzegovina  1962            61.9
+## 4 Bosnia and Herzegovina  1967            64.8
 ```
 
 ---
@@ -360,12 +422,24 @@ yugoslavia %>%
 
 ## Column Name with Space Example
 
-```{r}
+
+```r
 library(pander)
-yugoslavia %>% filter(country == "Serbia") %>%
-    select(year, lifeExp) %>%
-    rename(Year = year, `Life Expectancy` = lifeExp) %>%
+yugoslavia %&gt;% filter(country == "Serbia") %&gt;%
+    select(year, lifeExp) %&gt;%
+    rename(Year = year, `Life Expectancy` = lifeExp) %&gt;%
     head(5)
+```
+
+```
+## # A tibble: 5 x 2
+##    Year `Life Expectancy`
+##   &lt;int&gt;             &lt;dbl&gt;
+## 1  1952              58.0
+## 2  1957              61.7
+## 3  1962              64.5
+## 4  1967              66.9
+## 5  1972              68.7
 ```
 
 ---
@@ -378,12 +452,24 @@ class: inverse
 In `dplyr`, you can add new columns to a data frame using `mutate()`.
 
 
-```{r}
-yugoslavia %>% filter(country == "Serbia") %>%
-    select(year, pop, lifeExp) %>%
-    mutate(pop_million = pop / 1000000, #<<
-           life_exp_past_40 = lifeExp - 40) %>% #<<
+
+```r
+yugoslavia %&gt;% filter(country == "Serbia") %&gt;%
+    select(year, pop, lifeExp) %&gt;%
+*   mutate(pop_million = pop / 1000000,
+*          life_exp_past_40 = lifeExp - 40) %&gt;%
     head(5)
+```
+
+```
+## # A tibble: 5 x 5
+##    year     pop lifeExp pop_million life_exp_past_40
+##   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;
+## 1  1952 6860147    58.0        6.86             18.0
+## 2  1957 7271135    61.7        7.27             21.7
+## 3  1962 7616060    64.5        7.62             24.5
+## 4  1967 7971222    66.9        7.97             26.9
+## 5  1972 8313288    68.7        8.31             28.7
 ```
 
 .footnote[Note you can create multiple variables in a single `mutate()` call by separating the expressions with commas.]
@@ -394,7 +480,8 @@ yugoslavia %>% filter(country == "Serbia") %>%
 
 A common function used in `mutate()` (and in general in R programming) is `ifelse()`. It returns a vector of values depending on a logical test.
 
-```{r, eval=FALSE}
+
+```r
 ifelse(test = x==y, yes = first_value , no = second_value)
 ```
 
@@ -409,22 +496,37 @@ Output from `ifelse()` if `x==y` is...
 
 For example:
 
-```{r}
-example <- c(1, 0, NA, -2)
-ifelse(example > 0, "Positive", "Not Positive")
+
+```r
+example &lt;- c(1, 0, NA, -2)
+ifelse(example &gt; 0, "Positive", "Not Positive")
+```
+
+```
+## [1] "Positive"     "Not Positive" NA             "Not Positive"
 ```
 
 ---
 # `ifelse()` Example
 
 
-```{r}
-yugoslavia %>% mutate(short_country = 
+
+```r
+yugoslavia %&gt;% mutate(short_country = 
                  ifelse(country == "Bosnia and Herzegovina", 
-                        "B and H", as.character(country))) %>%
-    select(short_country, year, pop) %>%
-    arrange(year, short_country) %>%
+                        "B and H", as.character(country))) %&gt;%
+    select(short_country, year, pop) %&gt;%
+    arrange(year, short_country) %&gt;%
     head(3)
+```
+
+```
+## # A tibble: 3 x 3
+##   short_country  year     pop
+##   &lt;chr&gt;         &lt;int&gt;   &lt;int&gt;
+## 1 B and H        1952 2791000
+## 2 Croatia        1952 3882229
+## 3 Montenegro     1952  413834
 ```
 
 Read this as "For each row, if country equals 'Bosnia and Herzegovina', make `short_country` equal to 'B and H', otherwise make it equal to that row's value of `country`."
@@ -436,11 +538,29 @@ This is a simple way to change some values but not others!
 
 `case_when()` performs multiple `ifelse()` operations at the same time. `case_when()` allows you to create a new variable with values based on multiple logical statements. This is useful for making categorical variables or variables from combinations of other variables.
 .small[
-```{r}
-gapminder %>% mutate(gdpPercap_ordinal = case_when(
-    gdpPercap < 700 ~ "low",
-    gdpPercap >= 700 & gdpPercap < 800 ~ "moderate",
+
+```r
+gapminder %&gt;% mutate(gdpPercap_ordinal = case_when(
+    gdpPercap &lt; 700 ~ "low",
+    gdpPercap &gt;= 700 &amp; gdpPercap &lt; 800 ~ "moderate",
     TRUE ~ "high" )) # Value when all other statements are FALSE
+```
+
+```
+## # A tibble: 1,704 x 7
+##    country     continent  year lifeExp      pop gdpPercap gdpPercap_ordinal
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;            
+##  1 Afghanistan Asia       1952    28.8  8425333      779. moderate         
+##  2 Afghanistan Asia       1957    30.3  9240934      821. high             
+##  3 Afghanistan Asia       1962    32.0 10267083      853. high             
+##  4 Afghanistan Asia       1967    34.0 11537966      836. high             
+##  5 Afghanistan Asia       1972    36.1 13079460      740. moderate         
+##  6 Afghanistan Asia       1977    38.4 14880372      786. moderate         
+##  7 Afghanistan Asia       1982    39.9 12881816      978. high             
+##  8 Afghanistan Asia       1987    40.8 13867957      852. high             
+##  9 Afghanistan Asia       1992    41.7 16317921      649. low              
+## 10 Afghanistan Asia       1997    41.8 22227415      635. low              
+## # ... with 1,694 more rows
 ```
 ]
 
@@ -467,13 +587,21 @@ You can use any function in `summarize()` that aggregates *multiple values* into
 
 For the year 1982, let's get the *number of observations*, *total population*, *mean life expectancy*, and *range of life expectancy* for former Yugoslavian countries.
 
-```{r}
-yugoslavia %>%
-    filter(year == 1982) %>%
+
+```r
+yugoslavia %&gt;%
+    filter(year == 1982) %&gt;%
     summarize(n_obs = n(),
               total_pop = sum(pop),
               mean_life_exp = mean(lifeExp),
               range_life_exp = max(lifeExp) - min(lifeExp))
+```
+
+```
+## # A tibble: 1 x 4
+##   n_obs total_pop mean_life_exp range_life_exp
+##   &lt;int&gt;     &lt;int&gt;         &lt;dbl&gt;          &lt;dbl&gt;
+## 1     5  20042685          71.3           3.94
 ```
 
 These new variables are calculated using *all of the rows* in `yugoslavia`
@@ -486,10 +614,18 @@ These new variables are calculated using *all of the rows* in `yugoslavia`
 
 Maybe you need to calculate the mean and standard deviation of a bunch of columns. With `summarize_at()`, put the variables to compute over first `vars()` (using `select()` syntax) and put the functions to use in `funs()` after.
 
-```{r}
-yugoslavia %>%
-    filter(year == 1982) %>%
+
+```r
+yugoslavia %&gt;%
+    filter(year == 1982) %&gt;%
     summarize_at(vars(lifeExp, pop), funs(mean, sd))
+```
+
+```
+## # A tibble: 1 x 4
+##   lifeExp_mean pop_mean lifeExp_sd   pop_sd
+##          &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1         71.3  4008537       1.60 3237282.
 ```
 
 Note it automatically names the summarized variables based on the functions used to summarize.
@@ -504,14 +640,16 @@ There are additional `dplyr` functions similar to `summarize_at()`:
 
 * `summarize_all()` and `mutate_all()` summarize / mutate *all* variables sent to them in the same way. For instance, getting the mean and standard deviation of an entire dataframe:
 
-```{r, eval=FALSE}
-dataframe %>% summarize_all(funs(mean, sd))
+
+```r
+dataframe %&gt;% summarize_all(funs(mean, sd))
 ```
 
 * `summarize_if()` and `mutate_if()` summarize / mutate all variables that satisfy some logical condition. For instance, summarizing every numeric column in a dataframe at once:
 
-```{r, eval=FALSE}
-dataframe %>% summarize_if(is.numeric, funs(mean, sd))
+
+```r
+dataframe %&gt;% summarize_if(is.numeric, funs(mean, sd))
 ```
 
 You can use all of these to avoid typing out the same code repeatedly!
@@ -530,13 +668,25 @@ Typically the variables you group by will be integers, factors, or characters, a
 `group_by()` example
 
 
-```{r}
-yugoslavia %>%
-  group_by(year) %>% #<<
+
+```r
+yugoslavia %&gt;%
+* group_by(year) %&gt;%
     summarize(num_countries = n_distinct(country),
               total_pop = sum(pop),
-              total_gdp_per_cap = sum(pop*gdpPercap)/total_pop) %>%
+              total_gdp_per_cap = sum(pop*gdpPercap)/total_pop) %&gt;%
     head(5)
+```
+
+```
+## # A tibble: 5 x 4
+##    year num_countries total_pop total_gdp_per_cap
+##   &lt;int&gt;         &lt;int&gt;     &lt;int&gt;             &lt;dbl&gt;
+## 1  1952             5  15436728             3030.
+## 2  1957             5  16314276             4187.
+## 3  1962             5  17099107             5257.
+## 4  1967             5  17878535             6656.
+## 5  1972             5  18579786             8730.
 ```
 
 Because we did `group_by()` with `year` then used `summarize()`, we get *one row per value of `year`*!
@@ -548,14 +698,26 @@ Each value of year is its own **group**!
 
 Grouping can also be used with `mutate()` or `filter()` to give rank orders within a group, lagged values, and cumulative sums. You can read more about window functions in this [vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
 
-```{r}
-yugoslavia %>% 
-  select(country, year, pop) %>%
-  filter(year >= 2002) %>% 
-  group_by(country) %>%
+
+```r
+yugoslavia %&gt;% 
+  select(country, year, pop) %&gt;%
+  filter(year &gt;= 2002) %&gt;% 
+  group_by(country) %&gt;%
   mutate(lag_pop = lag(pop, order_by = year),
-         pop_chg = pop - lag_pop) %>%
+         pop_chg = pop - lag_pop) %&gt;%
   head(4)
+```
+
+```
+## # A tibble: 4 x 5
+## # Groups:   country [2]
+##   country                 year     pop lag_pop pop_chg
+##   &lt;fct&gt;                  &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+## 1 Bosnia and Herzegovina  2002 4165416      NA      NA
+## 2 Bosnia and Herzegovina  2007 4552198 4165416  386782
+## 3 Croatia                 2002 4481020      NA      NA
+## 4 Croatia                 2007 4493312 4481020   12292
 ```
 
 ---
@@ -587,19 +749,19 @@ We need to think about the following when we want to merge data frames `A` and `
 ---
 ## Join Types: Rows and columns kept
 
-There are many types of joins<sup>1</sup>...
+There are many types of joins&lt;sup&gt;1&lt;/sup&gt;...
 
-* `A %>% left_join(B)`: keep all rows from `A`, matched with `B` wherever possible (`NA` when not), keep columns from both `A` and `B`
+* `A %&gt;% left_join(B)`: keep all rows from `A`, matched with `B` wherever possible (`NA` when not), keep columns from both `A` and `B`
 
-* `A %>% right_join(B)`: keep all rows from `B`, matched with `A` wherever possible (`NA` when not), keep columns from both `A` and `B`
+* `A %&gt;% right_join(B)`: keep all rows from `B`, matched with `A` wherever possible (`NA` when not), keep columns from both `A` and `B`
 
-* `A %>% inner_join(B)`: keep rows from `A` that match rows in `B`, keep columns from both `A` and `B`
+* `A %&gt;% inner_join(B)`: keep rows from `A` that match rows in `B`, keep columns from both `A` and `B`
 
-* `A %>% full_join(B)`: keep all rows from either `A` or `B`, matched wherever possible (`NA` when not), keep columns from both `A` and `B`
+* `A %&gt;% full_join(B)`: keep all rows from either `A` or `B`, matched wherever possible (`NA` when not), keep columns from both `A` and `B`
 
-* `A %>% semi_join(B)`: keep rows from `A` that match rows in `B`, keep columns from only `A`
+* `A %&gt;% semi_join(B)`: keep rows from `A` that match rows in `B`, keep columns from only `A`
 
-* `A %>% anti_join(B)`: keep rows from `A` that *don't* match a row in `B`, keep columns from only `A`
+* `A %&gt;% anti_join(B)`: keep rows from `A` that *don't* match a row in `B`, keep columns from only `A`
 
 .pull-right[.footnote[[1] Usually `left_join()` does the job.]]
 
@@ -629,7 +791,8 @@ Need to get more complicated? Break it into multiple operations.
 
 We'll use data in the [`nycflights13` package](https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf).
 
-```{r}
+
+```r
 library(nycflights13)
 ```
 
@@ -643,7 +806,8 @@ It includes five dataframes, some of which contain missing data (`NA`):
 
 Note these are *separate data frames*, each needing to be *loaded separately*:
 
-```{r, eval=FALSE}
+
+```r
 data(flights)
 data(airlines)
 data(airports)
@@ -654,12 +818,25 @@ data(airports)
 ## Join Example #1
 
 Who manufactures the planes that flew to SeaTac?
-```{r}
-flights %>% filter(dest == "SEA") %>% select(tailnum) %>%
-    left_join(planes %>% select(tailnum, manufacturer), #<<
-              by = "tailnum") %>%
-    count(manufacturer) %>% # Count observations by manufacturer
+
+```r
+flights %&gt;% filter(dest == "SEA") %&gt;% select(tailnum) %&gt;%
+*   left_join(planes %&gt;% select(tailnum, manufacturer),
+              by = "tailnum") %&gt;%
+    count(manufacturer) %&gt;% # Count observations by manufacturer
     arrange(desc(n)) # Arrange data descending by count
+```
+
+```
+## # A tibble: 6 x 2
+##   manufacturer           n
+##   &lt;chr&gt;              &lt;int&gt;
+## 1 BOEING              2659
+## 2 AIRBUS               475
+## 3 AIRBUS INDUSTRIE     394
+## 4 &lt;NA&gt;                 391
+## 5 BARKER JACK L          2
+## 6 CIRRUS DESIGN CORP     2
 ```
 
 Note you can perform operations on the data inside functions such as `left_join()` and the *output* will be used by the function.
@@ -716,7 +893,7 @@ First things to check after loading new data:
 | **Program**     | **Female** | **Male** |
 |-----------------|-----------:|---------:|
 | Evans School    |     10     |    6    |
-| Arts & Sciences |      5     |    6    |
+| Arts &amp; Sciences |      5     |    6    |
 | Public Health   |      2     |    3    |
 | Other           |      5     |    1    |
 
@@ -727,7 +904,7 @@ First things to check after loading new data:
 * What are the variables?
     + Program, Gender, Count
 * What are the values?
-    + Program: Evans School, Arts & Sciences, Public Health, Other
+    + Program: Evans School, Arts &amp; Sciences, Public Health, Other
     + Gender: Female, Male -- **in the column headings, not its own column!**
     + Count: **spread over two columns!**
 
@@ -738,8 +915,8 @@ First things to check after loading new data:
 |-----------------|-----------:|---------:|
 | Evans School    |     Female |    10   |
 | Evans School    |     Male   |    6    |
-| Arts & Sciences |     Female |    5    |
-| Arts & Sciences |     Male   |    6    |
+| Arts &amp; Sciences |     Female |    5    |
+| Arts &amp; Sciences |     Male   |    6    |
 | Public Health   |     Female |    2    |
 | Public Health   |     Male   |    3    |
 | Other           |     Female |    5    |
@@ -758,11 +935,12 @@ We're going to work with some *ugly* data: *The Billboard Hot 100 for the year 2
 
 We can load it like so:
 
-```{r, warning=FALSE, message=FALSE}
+
+```r
 library(readr) # Contains read_csv()
-billboard_2000_raw <- 
+billboard_2000_raw &lt;- 
   read_csv(file = "https://raw.githubusercontent.com/hadley/tidyr/master/vignettes/billboard.csv",
-           col_types = paste(c("icccD", rep("i", 76)), collapse="")) #<<
+*          col_types = paste(c("icccD", rep("i", 76)), collapse=""))
 ```
 
 .footnote[`col_types=` is used to specify column types. [See here for details.](https://clanfear.github.io/CSSS508/Lectures/Week5/CSSS508_week5_data_import_export_cleaning.html#29)]
@@ -771,10 +949,21 @@ billboard_2000_raw <-
 # Billboard is Just Ugly-Messy
 
 .small[
-```{r, echo=FALSE}
-library(pander)
-pander(head(billboard_2000_raw[,1:10], 12), split.tables=120, style="rmarkdown")
-```
+
+| year |       artist        |          track          | time | date.entered | wk1 | wk2 | wk3 | wk4 | wk5 |
+|:----:|:-------------------:|:-----------------------:|:----:|:------------:|:---:|:---:|:---:|:---:|:---:|
+| 2000 |        2 Pac        | Baby Don't Cry (Keep... | 4:22 |  2000-02-26  | 87  | 82  | 72  | 77  | 87  |
+| 2000 |       2Ge+her       | The Hardest Part Of ... | 3:15 |  2000-09-02  | 91  | 87  | 92  | NA  | NA  |
+| 2000 |    3 Doors Down     |       Kryptonite        | 3:53 |  2000-04-08  | 81  | 70  | 68  | 67  | 66  |
+| 2000 |    3 Doors Down     |          Loser          | 4:24 |  2000-10-21  | 76  | 76  | 72  | 69  | 67  |
+| 2000 |      504 Boyz       |      Wobble Wobble      | 3:35 |  2000-04-15  | 57  | 34  | 25  | 17  | 17  |
+| 2000 |        98^0         | Give Me Just One Nig... | 3:24 |  2000-08-19  | 51  | 39  | 34  | 26  | 26  |
+| 2000 |       A*Teens       |      Dancing Queen      | 3:44 |  2000-07-08  | 97  | 97  | 96  | 95  | 100 |
+| 2000 |       Aaliyah       |      I Don't Wanna      | 4:15 |  2000-01-29  | 84  | 62  | 51  | 41  | 38  |
+| 2000 |       Aaliyah       |        Try Again        | 4:03 |  2000-03-18  | 59  | 53  | 38  | 28  | 21  |
+| 2000 |   Adams, Yolanda    |      Open My Heart      | 5:30 |  2000-08-26  | 76  | 76  | 74  | 69  | 68  |
+| 2000 |    Adkins, Trace    |          More           | 3:05 |  2000-04-29  | 84  | 84  | 75  | 73  | 73  |
+| 2000 | Aguilera, Christina | Come On Over Baby (A... | 3:38 |  2000-08-05  | 57  | 47  | 45  | 29  | 23  |
 ]
 
 Week columns continue up to `wk76`!
@@ -855,11 +1044,16 @@ The `tidyr` package provides functions to tidy up data, similar to `reshape` in 
 
 Let's use `gather()` to get the week and rank variables out of their current layout into two columns (big increase in rows, big drop in columns):
 
-```{r, message=FALSE, warning=FALSE}
+
+```r
 library(tidyr)
-billboard_2000 <- billboard_2000_raw %>%
-    gather(key = week, value = rank, starts_with("wk")) #<<
+billboard_2000 &lt;- billboard_2000_raw %&gt;%
+*   gather(key = week, value = rank, starts_with("wk"))
 dim(billboard_2000)
+```
+
+```
+## [1] 24092     7
 ```
 
 `starts_with()` and other helper functions from `dplyr::select()` work here too.
@@ -870,8 +1064,21 @@ We could instead use: `gather(key = week, value = rank, wk1:wk76)` to pull out t
 # `gather`ed Weeks
 
 .smallish[
-```{r, message=FALSE, warning=FALSE}
+
+```r
 head(billboard_2000)
+```
+
+```
+## # A tibble: 6 x 7
+##    year artist       track                   time  date.entered week   rank
+##   &lt;int&gt; &lt;chr&gt;        &lt;chr&gt;                   &lt;chr&gt; &lt;date&gt;       &lt;chr&gt; &lt;int&gt;
+## 1  2000 2 Pac        Baby Don't Cry (Keep... 4:22  2000-02-26   wk1      87
+## 2  2000 2Ge+her      The Hardest Part Of ... 3:15  2000-09-02   wk1      91
+## 3  2000 3 Doors Down Kryptonite              3:53  2000-04-08   wk1      81
+## 4  2000 3 Doors Down Loser                   4:24  2000-10-21   wk1      76
+## 5  2000 504 Boyz     Wobble Wobble           3:35  2000-04-15   wk1      57
+## 6  2000 98^0         Give Me Just One Nig... 3:24  2000-08-19   wk1      51
 ```
 ]
 
@@ -880,21 +1087,33 @@ Now we have a single week column!
 ---
 # Gathering Better?
 
-```{r}
+
+```r
 summary(billboard_2000$rank)
 ```
 
-This is an improvement, but we don't want to keep the `r sum(is.na(billboard_2000$rank))` rows with missing ranks (i.e. observations for weeks since entering the Hot 100 that the song was no longer on the Hot 100).
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    1.00   26.00   51.00   51.05   76.00  100.00   18785
+```
+
+This is an improvement, but we don't want to keep the 18785 rows with missing ranks (i.e. observations for weeks since entering the Hot 100 that the song was no longer on the Hot 100).
 
 ---
 # Gathering Better: `na.rm`
 
 The argument `na.rm = TRUE` to `gather()` will remove rows with missing ranks.
-```{r}
-billboard_2000 <- billboard_2000_raw %>%
+
+```r
+billboard_2000 &lt;- billboard_2000_raw %&gt;%
     gather(key = week, value = rank, starts_with("wk"),
-           na.rm = TRUE) #<<
+*          na.rm = TRUE)
 summary(billboard_2000$rank)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00   26.00   51.00   51.05   76.00  100.00
 ```
 
 ---
@@ -902,13 +1121,19 @@ summary(billboard_2000$rank)
 
 The track length column isn't analytically friendly. Let's convert it to a number rather than the character (minutes:seconds) format:
 
-```{r}
-billboard_2000 <- billboard_2000 %>%
+
+```r
+billboard_2000 &lt;- billboard_2000 %&gt;%
     separate(time, into = c("minutes", "seconds"),
-             sep = ":", convert = TRUE) %>% #<<
-    mutate(length = minutes + seconds / 60) %>%
+*            sep = ":", convert = TRUE) %&gt;%
+    mutate(length = minutes + seconds / 60) %&gt;%
     select(-minutes, -seconds)
 summary(billboard_2000$length)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   2.600   3.667   3.933   4.031   4.283   7.833
 ```
 
 `sep = :` tells `separate()` to split the column into two where it finds a colon (`:`).
@@ -920,10 +1145,16 @@ Then we add `seconds / 60` to `minutes` to produce a numeric `length` in minutes
 
 `tidyr` provides a convenience function to grab just the numeric information from a column that mixes text and numbers:
 
-```{r}
-billboard_2000 <- billboard_2000 %>%
-    mutate(week = parse_number(week)) #<<
+
+```r
+billboard_2000 &lt;- billboard_2000 %&gt;%
+*   mutate(week = parse_number(week))
 summary(billboard_2000$week)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    5.00   10.00   11.47   16.00   65.00
 ```
 
 For more sophisticated conversion or pattern checking, you'll need to use string parsing (to be covered in week 8).
@@ -954,19 +1185,37 @@ A common cue to use `spread()` is having measurements of different quantities in
 # Before `spread()`
 
 .smallish[
-```{r}
-(too_long_data <- data.frame(Group = c(rep("A", 3), rep("B", 3)),
+
+```r
+(too_long_data &lt;- data.frame(Group = c(rep("A", 3), rep("B", 3)),
                              Statistic = rep(c("Mean", "Median", "SD"), 2),
                              Value = c(1.28, 1.0, 0.72, 2.81, 2, 1.33)))
+```
+
+```
+##   Group Statistic Value
+## 1     A      Mean  1.28
+## 2     A    Median  1.00
+## 3     A        SD  0.72
+## 4     B      Mean  2.81
+## 5     B    Median  2.00
+## 6     B        SD  1.33
 ```
 ]
 
 ---
 # After `spread()`
 
-```{r}
-(just_right_data <- too_long_data %>%
+
+```r
+(just_right_data &lt;- too_long_data %&gt;%
     spread(key = Statistic, value = Value))
+```
+
+```
+##   Group Mean Median   SD
+## 1     A 1.28      1 0.72
+## 2     B 2.81      2 1.33
 ```
 
 ---
@@ -974,18 +1223,19 @@ A common cue to use `spread()` is having measurements of different quantities in
 
 Let's look at songs that hit #1 at some point and look how they got there versus songs that did not:
 
-```{r}
+
+```r
 # find best rank for each song
-best_rank <- billboard_2000 %>%
-    group_by(artist, track) %>%
-    summarize(min_rank = min(rank), #<<
-              weeks_at_1 = sum(rank == 1)) %>%
+best_rank &lt;- billboard_2000 %&gt;%
+    group_by(artist, track) %&gt;%
+*   summarize(min_rank = min(rank),
+              weeks_at_1 = sum(rank == 1)) %&gt;%
     mutate(`Peak rank` = ifelse(min_rank == 1,
                                 "Hit #1",
                                 "Didn't #1"))
 
 # merge onto original data
-billboard_2000 <- billboard_2000 %>%
+billboard_2000 &lt;- billboard_2000 %&gt;%
     left_join(best_rank, by = c("artist", "track"))
 ```
 
@@ -994,12 +1244,26 @@ billboard_2000 <- billboard_2000 %>%
 ---
 ## Which Were #1 the Most Weeks?
 
-```{r}
-billboard_2000 %>%
-    select(artist, track, weeks_at_1) %>%
-    distinct(artist, track, weeks_at_1) %>%
-    arrange(desc(weeks_at_1)) %>%
+
+```r
+billboard_2000 %&gt;%
+    select(artist, track, weeks_at_1) %&gt;%
+    distinct(artist, track, weeks_at_1) %&gt;%
+    arrange(desc(weeks_at_1)) %&gt;%
     head(7)
+```
+
+```
+## # A tibble: 7 x 3
+##   artist              track                   weeks_at_1
+##   &lt;chr&gt;               &lt;chr&gt;                        &lt;int&gt;
+## 1 Destiny's Child     Independent Women Pa...         11
+## 2 Santana             Maria, Maria                    10
+## 3 Aguilera, Christina Come On Over Baby (A...          4
+## 4 Madonna             Music                            4
+## 5 Savage Garden       I Knew I Loved You               4
+## 6 Destiny's Child     Say My Name                      3
+## 7 Iglesias, Enrique   Be With You                      3
 ```
 
 ---
@@ -1007,11 +1271,22 @@ billboard_2000 %>%
 
 We have the date the songs first charted, but not the dates for later weeks. We can calculate these now that the data are tidy:
 
-```{r}
-billboard_2000 <- billboard_2000 %>%
-    mutate(date = date.entered + (week - 1) * 7) #<<
-billboard_2000 %>% arrange(artist, track, week) %>%
-    select(artist, date.entered, week, date, rank) %>% head(4)
+
+```r
+billboard_2000 &lt;- billboard_2000 %&gt;%
+*   mutate(date = date.entered + (week - 1) * 7)
+billboard_2000 %&gt;% arrange(artist, track, week) %&gt;%
+    select(artist, date.entered, week, date, rank) %&gt;% head(4)
+```
+
+```
+## # A tibble: 4 x 5
+##   artist date.entered  week date        rank
+##   &lt;chr&gt;  &lt;date&gt;       &lt;dbl&gt; &lt;date&gt;     &lt;int&gt;
+## 1 2 Pac  2000-02-26       1 2000-02-26    87
+## 2 2 Pac  2000-02-26       2 2000-03-04    82
+## 3 2 Pac  2000-02-26       3 2000-03-11    72
+## 4 2 Pac  2000-02-26       4 2000-03-18    77
 ```
 
 This works because `date` objects are in units of days—we just add 7 days per week to the start date.
@@ -1026,9 +1301,10 @@ We could visualize the data we worked with today to understand it better.
 ---
 # Charts of 2000: `ggplot2`
 
-```{r, message=FALSE, warning=FALSE}
+
+```r
 library(ggplot2)
-billboard_trajectories <- 
+billboard_trajectories &lt;- 
   ggplot(data = billboard_2000,
          aes(x = week, y = rank, group = track,
              color = `Peak rank`)
@@ -1048,9 +1324,7 @@ billboard_trajectories <-
 ---
 # Charts of 2000: Beauty!
 
-```{r, cache=FALSE, echo=FALSE, dev="svg", fig.height=4}
-billboard_trajectories
-```
+![](intermediate_r_slides_files/figure-html/unnamed-chunk-45-1.svg)&lt;!-- --&gt;
 
 Observation: There appears to be censoring around week 20 for songs falling out of the top 50 that I'd want to follow up on.
 
@@ -1063,3 +1337,51 @@ Observation: There appears to be censoring around week 20 for songs falling out 
    * [DataCamp](https://www.datacamp.com/): A source for interactive R tutorials (some free of charge).
    * [`swirl`](http://swirlstats.com/students.html): Interactive tutorials inside R.
    * [Useful RStudio cheatsheets](https://www.rstudio.com/resources/cheatsheets/) on R Markdown, RStudio shortcuts, etc.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
