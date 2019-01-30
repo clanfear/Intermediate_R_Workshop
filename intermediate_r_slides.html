@@ -13,7 +13,7 @@ class: center, top, title-slide
 # Intermediate R
 ## UW Tacoma
 ### Charles Lanfear
-### Jan 31, 2019<br>Updated: Jan 29, 2019
+### Jan 31, 2019<br>Updated: Jan 30, 2019
 
 ---
 
@@ -31,9 +31,9 @@ class: center, top, title-slide
 
 3. Summarizing Data
 
-4. Joining Data
+4. Tidying Data
 
-5. Tidying Data
+5. Joining Data
 
 6. Resources for Further Learning
 
@@ -83,7 +83,7 @@ class: inverse
 ---
 # But First, Pipes: `%&gt;%`
 
-`dplyr` uses the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) forward pipe operator, usually called simply a **pipe**. We write pipes like `%&gt;%` (`Ctrl+Shift+M` or `⌘ +Shift+M`).
+`dplyr` uses the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) forward pipe operator, usually called simply a **pipe**. We write pipes like **`%&gt;%`** (`Ctrl+Shift+M` or `⌘ +Shift+M`).
 
 --
 
@@ -156,7 +156,7 @@ No matter how long the chain of functions is, assignment is always done *at the 
 
 # `filter` Data Frames
 
-I used `filter()` earlier. We subset *rows* of data using logical conditions with `filter()`!
+I used **`filter()`** earlier. We subset *rows* of data using logical conditions with `filter()`!
 
 
 ```r
@@ -253,7 +253,7 @@ We can use `%in%` like `==` but for matching *any element* in the vector on its 
 
 ```r
 *former_yugoslavia &lt;- c("Bosnia and Herzegovina", "Croatia",
-              "Macedonia", "Montenegro", "Serbia", "Slovenia")
+*             "Macedonia", "Montenegro", "Serbia", "Slovenia")
 yugoslavia &lt;- gapminder %&gt;% filter(country %in% former_yugoslavia)
 tail(yugoslavia, 2)
 ```
@@ -300,7 +300,7 @@ The data are sorted by ascending `year` and descending `pop`.
 ---
 ## Keeping Columns: `select()`
 
-Not only can we subset rows, but we can include specific columns (and put them in the order listed) using `select()`. 
+Not only can we subset rows, but we can include specific columns (and put them in the order listed) using **`select()`**. 
 
 
 ```r
@@ -381,7 +381,7 @@ yugoslavia %&gt;%
 ### Safer: Rename Columns with `rename()`
 
 
-`rename()` renames variables using the same syntax as `select()` without dropping unmentioned variables.
+**`rename()`** renames variables using the same syntax as `select()` without dropping unmentioned variables.
 
 
 ```r
@@ -402,54 +402,13 @@ yugoslavia %&gt;%
 ```
 
 ---
-## Column Naming Practices
-
-* *Good* column names will be self-describing. Don't use inscrutable abbreviations to save typing. RStudio's autocompleting functions take away the pain of long variable names: Hit `TAB` while writing code to autocomplete.
-
---
-
-* *Valid* "naked" column names can contain upper or lowercase letters, numbers, periods, and underscores. They must start with a letter or period and not be a special reserved word (e.g. `TRUE`, `if`).
-
---
-
-* Names are case-sensitive: `Year` and `year` are not the same thing!
-
---
-
-* You can include spaces or use reserved words if you put backticks around the name. Spaces can be worth including when preparing data for `ggplot2` or tables since you don't have to rename axes or table headings.
-
----
-
-## Column Name with Space Example
-
-
-```r
-library(pander)
-yugoslavia %&gt;% filter(country == "Serbia") %&gt;%
-    select(year, lifeExp) %&gt;%
-    rename(Year = year, `Life Expectancy` = lifeExp) %&gt;%
-    head(5)
-```
-
-```
-## # A tibble: 5 x 2
-##    Year `Life Expectancy`
-##   &lt;int&gt;             &lt;dbl&gt;
-## 1  1952              58.0
-## 2  1957              61.7
-## 3  1962              64.5
-## 4  1967              66.9
-## 5  1972              68.7
-```
-
----
 class: inverse
 # Creating Variables
 
 ---
 ## `mutate()`
 
-In `dplyr`, you can add new columns to a data frame using `mutate()`.
+In `dplyr`, you can add new columns to a data frame using **`mutate()`**.
 
 
 
@@ -478,7 +437,7 @@ yugoslavia %&gt;% filter(country == "Serbia") %&gt;%
 # `ifelse()`
 
 
-A common function used in `mutate()` (and in general in R programming) is `ifelse()`. It returns a vector of values depending on a logical test.
+A common function used in `mutate()` (and in general in R programming) is **`ifelse()`**. It returns a vector of values depending on a logical test.
 
 
 ```r
@@ -536,31 +495,27 @@ This is a simple way to change some values but not others!
 ---
 # `case_when()`
 
-`case_when()` performs multiple `ifelse()` operations at the same time. `case_when()` allows you to create a new variable with values based on multiple logical statements. This is useful for making categorical variables or variables from combinations of other variables.
-.small[
+**`case_when()`** performs multiple `ifelse()` operations at the same time. `case_when()` allows you to create a new variable with values based on multiple logical statements. This is useful for making categorical variables or variables from combinations of other variables.
+.smallish[
 
 ```r
-gapminder %&gt;% mutate(gdpPercap_ordinal = case_when(
-    gdpPercap &lt; 700 ~ "low",
-    gdpPercap &gt;= 700 &amp; gdpPercap &lt; 800 ~ "moderate",
-    TRUE ~ "high" )) # Value when all other statements are FALSE
+gapminder %&gt;% 
+  mutate(gdpPercap_ordinal = 
+    case_when(
+      gdpPercap &lt;  700 ~ "low",
+      gdpPercap &gt;= 700 &amp; gdpPercap &lt; 800 ~ "moderate",
+      TRUE ~ "high" )) %&gt;% # Value when all other statements are FALSE
+  slice(6:9) # get rows 6 through 9
 ```
 
 ```
-## # A tibble: 1,704 x 7
-##    country     continent  year lifeExp      pop gdpPercap gdpPercap_ordinal
-##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;            
-##  1 Afghanistan Asia       1952    28.8  8425333      779. moderate         
-##  2 Afghanistan Asia       1957    30.3  9240934      821. high             
-##  3 Afghanistan Asia       1962    32.0 10267083      853. high             
-##  4 Afghanistan Asia       1967    34.0 11537966      836. high             
-##  5 Afghanistan Asia       1972    36.1 13079460      740. moderate         
-##  6 Afghanistan Asia       1977    38.4 14880372      786. moderate         
-##  7 Afghanistan Asia       1982    39.9 12881816      978. high             
-##  8 Afghanistan Asia       1987    40.8 13867957      852. high             
-##  9 Afghanistan Asia       1992    41.7 16317921      649. low              
-## 10 Afghanistan Asia       1997    41.8 22227415      635. low              
-## # ... with 1,694 more rows
+## # A tibble: 4 x 7
+##   country     continent  year lifeExp      pop gdpPercap gdpPercap_ordinal
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;            
+## 1 Afghanistan Asia       1977    38.4 14880372      786. moderate         
+## 2 Afghanistan Asia       1982    39.9 12881816      978. high             
+## 3 Afghanistan Asia       1987    40.8 13867957      852. high             
+## 4 Afghanistan Asia       1992    41.7 16317921      649. low
 ```
 ]
 
@@ -572,7 +527,7 @@ class: inverse
 ---
 ## General Aggregation: `summarize()`
 
-`summarize()` takes your column(s) of data and computes something using every row: 
+**`summarize()`** takes your column(s) of data and computes something using every row: 
 
 * Count how many rows there are
 * Calculate the mean
@@ -612,7 +567,7 @@ These new variables are calculated using *all of the rows* in `yugoslavia`
 ### `summarize_at()`
 
 
-Maybe you need to calculate the mean and standard deviation of a bunch of columns. With `summarize_at()`, put the variables to compute over first `vars()` (using `select()` syntax) and put the functions to use in `funs()` after.
+Maybe you need to calculate the mean and standard deviation of a bunch of columns. With **`summarize_at()`**, put the variables to compute over first `vars()` (using `select()` syntax) and put the functions to use in `funs()` after.
 
 
 ```r
@@ -658,9 +613,9 @@ You can use all of these to avoid typing out the same code repeatedly!
 # `group_by()`
 
 
-The special function `group_by()` changes how functions operate on the data, most importantly `summarize()`.
+The special function **`group_by()`** changes how subsequent functions operate on the data, most importantly `summarize()`.
 
-Functions after `group_by()` are computed *within each group* as defined by variables given, rather than over all rows at once.
+Functions after `group_by()` are computed *within each group* as defined by unique valus of the variables given, rather than over all rows at once.
 
 Typically the variables you group by will be integers, factors, or characters, and *not continuous real values*.
 
@@ -720,126 +675,6 @@ yugoslavia %&gt;%
 ## 4 Croatia                 2007 4493312 4481020   12292
 ```
 
----
-class: inverse
-##Joining Data
-
----
-## When Do We Need to Join Tables?
-
-* Want to make columns using criteria too complicated for `ifelse()` or `case_when()`
-
-   * We can work with small sets of variables then combine them back together.
-
-* Combine data stored in separate data sets: e.g. UW registrar information with police stop records.
-
-   * Often large surveys are broken into different data sets for each level (e.g. household, individual, neighborhood)
-
----
-## Joining in Concept
-
-We need to think about the following when we want to merge data frames `A` and `B`:
-
-* Which *rows* are we keeping from each data frame?
-
-* Which *columns* are we keeping from each data frame?
-
-* Which variables determine whether rows *match*?
-
----
-## Join Types: Rows and columns kept
-
-There are many types of joins&lt;sup&gt;1&lt;/sup&gt;...
-
-* `A %&gt;% left_join(B)`: keep all rows from `A`, matched with `B` wherever possible (`NA` when not), keep columns from both `A` and `B`
-
-* `A %&gt;% right_join(B)`: keep all rows from `B`, matched with `A` wherever possible (`NA` when not), keep columns from both `A` and `B`
-
-* `A %&gt;% inner_join(B)`: keep rows from `A` that match rows in `B`, keep columns from both `A` and `B`
-
-* `A %&gt;% full_join(B)`: keep all rows from either `A` or `B`, matched wherever possible (`NA` when not), keep columns from both `A` and `B`
-
-* `A %&gt;% semi_join(B)`: keep rows from `A` that match rows in `B`, keep columns from only `A`
-
-* `A %&gt;% anti_join(B)`: keep rows from `A` that *don't* match a row in `B`, keep columns from only `A`
-
-.pull-right[.footnote[[1] Usually `left_join()` does the job.]]
-
----
-## Matching Criteria
-
-We say rows should *match* because they have some columns containing the same value. We list these in a `by = ` argument to the join.
-
-Matching Behavior:
-
-* No `by`: Match using all variables in `A` and `B` that have identical names
-
---
-
-* `by = c("var1", "var2", "var3")`: Match on identical values of `var1`, `var2`, and `var3` in both `A` and `B`
-
---
-
-* `by = c("Avar1" = "Bvar1", "Avar2" = "Bvar2")`: Match identical values of `Avar1` variable in `A` to `Bvar1` variable in `B`, and `Avar2` variable in `A` to `Bvar2` variable in `B`
-
-Note: If there are multiple matches, you'll get *one row for each possible combination* (except with `semi_join()` and `anti_join()`).
-
-Need to get more complicated? Break it into multiple operations.
-
----
-## `nycflights13` Data
-
-We'll use data in the [`nycflights13` package](https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf).
-
-
-```r
-library(nycflights13)
-```
-
-It includes five dataframes, some of which contain missing data (`NA`):
-
-* `flights`: flights leaving JFK, LGA, or EWR in 2013
-* `airlines`: airline abbreviations
-* `airports`: airport metadata
-* `planes`: airplane metadata
-* `weather`: hourly weather data for JFK, LGA, and EWR
-
-Note these are *separate data frames*, each needing to be *loaded separately*:
-
-
-```r
-data(flights)
-data(airlines)
-data(airports)
-# and so on...
-```
-
----
-## Join Example #1
-
-Who manufactures the planes that flew to SeaTac?
-
-```r
-flights %&gt;% filter(dest == "SEA") %&gt;% select(tailnum) %&gt;%
-*   left_join(planes %&gt;% select(tailnum, manufacturer),
-              by = "tailnum") %&gt;%
-    count(manufacturer) %&gt;% # Count observations by manufacturer
-    arrange(desc(n)) # Arrange data descending by count
-```
-
-```
-## # A tibble: 6 x 2
-##   manufacturer           n
-##   &lt;chr&gt;              &lt;int&gt;
-## 1 BOEING              2659
-## 2 AIRBUS               475
-## 3 AIRBUS INDUSTRIE     394
-## 4 &lt;NA&gt;                 391
-## 5 BARKER JACK L          2
-## 6 CIRRUS DESIGN CORP     2
-```
-
-Note you can perform operations on the data inside functions such as `left_join()` and the *output* will be used by the function.
 
 ---
 class: inverse
@@ -1021,22 +856,22 @@ The `tidyr` package provides functions to tidy up data, similar to `reshape` in 
 
 --
 
-* `gather()`: takes a set of columns and rotates them down to make two new columns (which you can name yourself): 
+* **`gather()`**: takes a set of columns and rotates them down to make two new columns (which you can name yourself): 
     * A `key` that stores the original column names
     * A `value` with the values in those original columns
 
 --
 
-* `spread()`: inverts `gather()` by taking two columns and rotating them up into multiple columns
+* **`spread()`**: inverts `gather()` by taking two columns and rotating them up into multiple columns
 
 --
 
-* `separate()`: pulls apart one column into multiple columns (common with `gather`ed data where values had been embedded in column names)
+* **`separate()`**: pulls apart one column into multiple columns (common with `gather`ed data where values had been embedded in column names)
     * `extract_numeric()` does a simple version of this for the common case when you just want grab the number part
 
 --
 
-* `extract()` for spreading a column into multiple *sets* of columns.
+* **`extract()`** for spreading a column into multiple *sets* of columns.
    * See [Hadley's response to this question](https://stackoverflow.com/questions/25925556/gather-multiple-sets-of-columns) for an example.
 
 ---
@@ -1292,6 +1127,128 @@ billboard_2000 %&gt;% arrange(artist, track, week) %&gt;%
 This works because `date` objects are in units of days—we just add 7 days per week to the start date.
 
 ---
+class: inverse
+##Joining Data
+
+---
+## When Do We Need to Join Data?
+
+* Want to make columns using criteria too complicated for `ifelse()` or `case_when()`
+
+   * We can work with small sets of variables then combine them back together.
+
+* Combine data stored in separate data sets: e.g. UW registrar information with police stop records.
+
+   * Often large surveys are broken into different data sets for each level (e.g. household, individual, neighborhood)
+
+---
+## Joining in Concept
+
+We need to think about the following when we want to merge data frames `A` and `B`:
+
+* Which *rows* are we keeping from each data frame?
+
+* Which *columns* are we keeping from each data frame?
+
+* Which variables determine whether rows *match*?
+
+---
+## Join Types: Rows and columns kept
+
+There are many types of joins&lt;sup&gt;1&lt;/sup&gt;...
+
+* `A %&gt;% left_join(B)`: keep all rows from `A`, matched with `B` wherever possible (`NA` when not), keep columns from both `A` and `B`
+
+* `A %&gt;% right_join(B)`: keep all rows from `B`, matched with `A` wherever possible (`NA` when not), keep columns from both `A` and `B`
+
+* `A %&gt;% inner_join(B)`: keep only rows from `A` and `B` that match, keep columns from both `A` and `B`
+
+* `A %&gt;% full_join(B)`: keep all rows from both `A` and `B`, matched wherever possible (`NA` when not), keep columns from both `A` and `B`
+
+* `A %&gt;% semi_join(B)`: keep rows from `A` that match rows in `B`, keep columns from only `A`
+
+* `A %&gt;% anti_join(B)`: keep rows from `A` that *don't* match a row in `B`, keep columns from only `A`
+
+.pull-right[.footnote[[1] Usually `left_join()` does the job.]]
+
+---
+## Matching Criteria
+
+We say rows should *match* because they have some columns containing the same value. We list these in a `by = ` argument to the join.
+
+Matching Behavior:
+
+* No `by`: Match using all variables in `A` and `B` that have identical names
+
+--
+
+* `by = c("var1", "var2", "var3")`: Match on identical values of `var1`, `var2`, and `var3` in both `A` and `B`
+
+--
+
+* `by = c("Avar1" = "Bvar1", "Avar2" = "Bvar2")`: Match identical values of `Avar1` variable in `A` to `Bvar1` variable in `B`, and `Avar2` variable in `A` to `Bvar2` variable in `B`
+
+Note: If there are multiple matches, you'll get *one row for each possible combination* (except with `semi_join()` and `anti_join()`).
+
+Need to get more complicated? Break it into multiple operations.
+
+---
+## `nycflights13` Data
+
+We'll use data in the [`nycflights13` package](https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf).
+
+
+```r
+library(nycflights13)
+```
+
+It includes five dataframes, some of which contain missing data (`NA`):
+
+* `flights`: flights leaving JFK, LGA, or EWR in 2013
+* `airlines`: airline abbreviations
+* `airports`: airport metadata
+* `planes`: airplane metadata
+* `weather`: hourly weather data for JFK, LGA, and EWR
+
+Note these are *separate data frames*, each needing to be *loaded separately*:
+
+
+```r
+data(flights)
+data(airlines)
+data(airports)
+# and so on...
+```
+
+---
+## Join Example
+
+Who manufactures the planes that flew to SeaTac?
+
+
+```r
+flights %&gt;% filter(dest == "SEA") %&gt;% select(tailnum) %&gt;%
+*   left_join(planes %&gt;% select(tailnum, manufacturer),
+              by = "tailnum") %&gt;%
+    count(manufacturer) %&gt;% # Count observations by manufacturer
+    arrange(desc(n)) # Arrange data descending by count
+```
+
+```
+## # A tibble: 6 x 2
+##   manufacturer           n
+##   &lt;chr&gt;              &lt;int&gt;
+## 1 BOEING              2659
+## 2 AIRBUS               475
+## 3 AIRBUS INDUSTRIE     394
+## 4 &lt;NA&gt;                 391
+## 5 BARKER JACK L          2
+## 6 CIRRUS DESIGN CORP     2
+```
+
+Note you can perform operations on the data inside functions such as `left_join()` and the *output* will be used by the function.
+
+---
 # Visualization Preview
 
 The next workshop will focus on visualization using `ggplot2`.
@@ -1324,7 +1281,7 @@ billboard_trajectories &lt;-
 ---
 # Charts of 2000: Beauty!
 
-![](intermediate_r_slides_files/figure-html/unnamed-chunk-45-1.svg)&lt;!-- --&gt;
+![](intermediate_r_slides_files/figure-html/unnamed-chunk-44-1.svg)&lt;!-- --&gt;
 
 Observation: There appears to be censoring around week 20 for songs falling out of the top 50 that I'd want to follow up on.
 
