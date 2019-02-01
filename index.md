@@ -12,7 +12,7 @@ layout: default
 * [.R Script to follow along](https://raw.githubusercontent.com/clanfear/Intermediate_R_Workshop/master/intermediate_r_script.R) (Save as to download)
 * [R and RStudio Installation Instructions](https://clanfear.github.io/CSSS508/docs/installation.html)
 * [Enabling compilation of packages](https://clanfear.github.io/CSSS508/docs/compiling.html)
-* Panopto Recording of Workshop (Not Up Yet), recorded Jan 31, 2018 (Requires UW NetID)
+* [Panopto Recording of Workshop](https://uw.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=10867a42-1be9-418e-883c-a9e601529c99), recorded Jan 31, 2018 (Requires UW NetID)
 
 ## General R Resources:
 
