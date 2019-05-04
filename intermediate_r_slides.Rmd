@@ -2,7 +2,7 @@
 title: "Intermediate R"
 subtitle: "UW Tacoma"  
 author: "Charles Lanfear"
-date: "Jan 31, 2019<br>Updated: `r gsub(' 0', ' ', format(Sys.Date(), format='%b %d, %Y'))`"
+date: "May 4, 2019<br>Updated: `r gsub(' 0', ' ', format(Sys.Date(), format='%b %d, %Y'))`"
 output:
   xaringan::moon_reader:
     lib_dir: libs
