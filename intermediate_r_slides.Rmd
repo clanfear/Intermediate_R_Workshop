@@ -463,7 +463,7 @@ Maybe you need to calculate the mean and standard deviation of a bunch of column
 ```{r}
 yugoslavia %>%
     filter(year == 1982) %>%
-    summarize_at(vars(lifeExp, pop), funs(mean, sd))
+    summarize_at(vars(lifeExp, pop), list(~mean(.), ~sd(.)))
 ```
 
 Note it automatically names the summarized variables based on the functions used to summarize.
