@@ -399,7 +399,7 @@ yugoslavia %>%
 
 library(readr) # Contains read_csv()
 billboard_2000_raw <- 
-  read_csv(file = "https://raw.githubusercontent.com/hadley/tidyr/master/vignettes/billboard.csv",
+  read_csv(file = "https://github.com/clanfear/Intermediate_R_Workshop/raw/master/data/billboard.csv",
   col_types = paste(c("icccD", rep("i", 76)), collapse="")) #<<
 
 # `col_types=` is used to specify column types. [See here for details.](https://clanfear.github.io/CSSS508/Lectures/Week5/CSSS508_week5_data_import_export_cleaning.html#29)]
