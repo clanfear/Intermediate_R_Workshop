@@ -630,7 +630,7 @@ We can load it like so:
 ```{r, warning=FALSE, message=FALSE}
 library(readr) # Contains read_csv()
 billboard_2000_raw <- 
-  read_csv(file = "data/billboard.csv",
+  read_csv(file = "https://github.com/clanfear/Intermediate_R_Workshop/raw/master/data/billboard.csv",
            col_types = paste(c("icccD", rep("i", 76)), collapse="")) #<<
 ```
 
